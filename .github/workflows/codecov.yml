@@ -27,13 +27,13 @@ jobs:
       run: sudo apt-get install -y jq
 
     - name: Read .nvmrc
-      run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
+      run: echo "$(cat .nvmrc) >> $GITHUB_OUTPUT"
       id: nvm
 
     - name: Use Node.js (.nvmrc)
       uses: actions/setup-node@v1
       with:
-        node-version: "${{ steps.nvm.outputs.NVMRC }}"
+        node-version: "${GITHUB_OUTPUT}"
 
     - name: Set up Kibana development environment
       run: yarn kbn bootstrap
