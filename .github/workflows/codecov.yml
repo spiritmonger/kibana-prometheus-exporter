@@ -12,14 +12,14 @@ jobs:
       with:
         fetch-depth: 2 
 
-    - name: Read .nvmrc
-      run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
+    - name: Read node version from .nvmrc
       id: nvm
+      run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_OUTPUT
 
     - name: Use Node.js (.nvmrc)
       uses: actions/setup-node@v1
       with:
-        node-version: "${{ steps.nvm.outputs.NVMRC }}"
+        node-version: "${{ steps.nvm.outputs.NODE_VERSION }}"
 
     - name: Install dependencies
       run: yarn
@@ -28,6 +28,6 @@ jobs:
       run: yarn test
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v2
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
